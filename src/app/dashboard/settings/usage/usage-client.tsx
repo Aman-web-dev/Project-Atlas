@@ -168,7 +168,10 @@ export function UsageClient({
                     fontSize: 12,
                   }}
                   labelStyle={{ color: "var(--muted-foreground)" }}
-                  formatter={(v: number) => [`$${v.toFixed(4)}`, "Spend"]}
+                  formatter={(value) => [
+                    `$${typeof value === "number" ? value.toFixed(4) : Number(value ?? 0).toFixed(4)}`,
+                    "Spend",
+                  ]}
                 />
                 <Area
                   type="monotone"
