@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Atlas AI Lambda functions
+
+Globals:
+  Function:
+    Runtime: nodejs24.x
+    MemorySize: 512
+    Timeout: 30
+    Environment:
+      Variables:
+        LOG_LEVEL: info
+        # OPENAI_API_KEY, ANTHROPIC_API_KEY, GOOGLE_AI_API_KEY
+        # are read from AWS Secrets Manager in production. See
+        # handler.readApiKey() for implementation guidance.
+
+Resources:
+  AtlasCopyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: atlas-ai-copy
+      Handler: handler.handler
+      CodeUri: ./ai-copy
+      Description: AI ad copy generation
+      Events:
+        CopyApi:
+          Type: Api
+          Properties:
+            Path: /copy
+            Method: POST
+
+  AtlasImageFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: atlas-ai-image
+      Handler: handler.handler
+      MemorySize: 1024
+      Timeout: 90
+      CodeUri: ./ai-image
+      Description: AI ad creative generation
+      Events:
+        ImageApi:
+          Type: Api
+          Properties:
+            Path: /image
+            Method: POST
+
+  AtlasCopyUrl:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /atlas/lambda/ai-copy-url
+      Type: String
+      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/copy"
+
+  AtlasImageUrl:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /atlas/lambda/ai-image-url
+      Type: String
+      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/image"
+
+Outputs:
+  CopyUrl:
+    Description: AI copy endpoint
+    Value: !GetAtt AtlasCopyUrl.Value
+    Export:
+      Name: atlas-ai-copy-url
+  ImageUrl:
+    Description: AI image endpoint
+    Value: !GetAtt AtlasImageUrl.Value
+    Export:
+      Name: atlas-ai-image-url

@@ -1,0 +1,17 @@
+{
+  "name": "@atlas/lambda-ai-image",
+  "version": "0.1.0",
+  "description": "Atlas AI image generation Lambda handler",
+  "main": "handler.js",
+  "scripts": {
+    "test": "node handler.test.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.658.0",
+    "@aws-sdk/client-s3": "^3.658.0",
+    "@aws-sdk/s3-request-presigner": "^3.658.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

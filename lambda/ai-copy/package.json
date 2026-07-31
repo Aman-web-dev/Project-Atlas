@@ -1,0 +1,15 @@
+{
+  "name": "@atlas/lambda-ai-copy",
+  "version": "0.1.0",
+  "description": "Atlas AI copy generation Lambda handler",
+  "main": "handler.js",
+  "scripts": {
+    "test": "node handler.test.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.658.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
